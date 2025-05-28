@@ -1,0 +1,33 @@
+name: example_app
+description: "An Example Flutter Project"
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 0.0.1+1  # App version (0.0.1) + build number (1) for stores
+
+environment:
+  sdk: ^3.6.0   # Dart SDK constraint: allows any 3.6.x version
+
+
+dependencies: # Runtime packages/library bundled into app for user
+  flutter:
+    sdk: flutter    # Core Flutter framework
+
+  english_words: ^4.0.0    # Demo helper: generates random word pairs
+  provider: ^6.1.2    # Simple state-management solution
+
+  font_awesome_flutter: ^10.1.0  # Access Font Awesome icons in Flutter
+  url_launcher: ^6.2.4    # Open URLs in browser/external apps
+  shared_preferences: ^2.2.2    # Key/value storage for persisting small data
+  collection: ^1.18.0   # Collection utilities (e.g. firstWhereOrNull)
+
+dev_dependencies: # Dev-only packages/library (not included in the release)
+  flutter_test:
+    sdk: flutter  # Flutter’s test framework
+
+  flutter_lints: ^5.0.0    # Effective Dart lint rules
+
+flutter:
+  uses-material-design: true  # Enables built-in Material icons & fonts
+  assets:
+    - assets/
+
