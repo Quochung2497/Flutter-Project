@@ -1,19 +1,10 @@
-import 'package:example_app/widgets/sign_link.dart';
 import 'package:flutter/material.dart';
-import '../../../widgets/text_field.dart';
 import 'package:flutter/services.dart';
-import '../../../widgets/password_field.dart';
-import '../../../widgets/term_and_conditions.dart';
-import '../../../widgets/services_button.dart';
-import '../../../widgets/or_divider.dart';
-import '../../../widgets/social_login.dart';
-import '../../../services/database.dart';
-import '../model/user.dart';
-import '../../../utils/validator.dart';
-import '../../../widgets/logo_widget.dart';
-import '../../../widgets/title_widget.dart';
-import '../../../constants/social_provider.dart';
-import '../../../constants/routes.dart';
+import 'package:example_app/widgets/widgets.dart';
+import 'package:example_app/features/account/model/model.dart';
+import 'package:example_app/utils/utils.dart';
+import 'package:example_app/constants/constants.dart';
+import 'package:example_app/services/services.dart';
 
 class CreateAccountScreen extends StatefulWidget{
   const CreateAccountScreen({Key? key}) : super(key: key);

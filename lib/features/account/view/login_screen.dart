@@ -1,17 +1,10 @@
-import 'package:example_app/utils/validator.dart';
-import 'package:example_app/widgets/or_divider.dart';
-import 'package:example_app/widgets/password_field.dart';
-import 'package:example_app/widgets/services_button.dart';
-import 'package:example_app/widgets/sign_link.dart';
-import 'package:example_app/widgets/social_login.dart';
-import 'package:example_app/widgets/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../constants/social_provider.dart';
-import '../../../widgets/logo_widget.dart';
-import '../../../widgets/title_widget.dart';
-import '../../../services/database.dart';
-import '../../../constants/routes.dart';
+import 'package:example_app/widgets/widgets.dart';
+import 'package:example_app/services/services.dart';
+import 'package:example_app/utils/utils.dart';
+import 'package:example_app/constants/constants.dart';
+
 
 class LoginScreen extends StatefulWidget{
   const LoginScreen({Key? key}) : super(key: key);
