@@ -1,10 +1,12 @@
+import 'package:example_app/features/account/provider/IAuth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:example_app/widgets/widgets.dart';
 import 'package:example_app/features/account/model/model.dart';
 import 'package:example_app/utils/utils.dart';
 import 'package:example_app/constants/constants.dart';
-import 'package:example_app/services/services.dart';
+import 'package:provider/provider.dart';
+import '../provider/auth_model.dart';
 
 class CreateAccountScreen extends StatefulWidget{
   const CreateAccountScreen({Key? key}) : super(key: key);
@@ -33,24 +35,18 @@ class CreateAccountScreenState extends State<CreateAccountScreen> {
       return;
     }
 
+    final auth    = context.read<IAuth>();
     final newUser = User(
-      email: emailController.text.trim(),
-      password: passwordController.text.trim(),
+      email:     emailController.text.trim(),
+      password:  passwordController.text,
       firstName: firstNameController.text.trim(),
-      lastName: lastNameController.text.trim(),
+      lastName:  lastNameController.text.trim(),
     );
 
-    try {
-      await mockDb.register(newUser);
-      await mockDb.debugPrintAllUsers();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Registered successfully!')),
-      );
+    context.read<IAuth>().clearError();
+    final success = await auth.register(newUser);
+    if (success) {
       Navigator.pushReplacementNamed(context, AppRoutes.login);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
     }
   }
 
@@ -67,8 +63,6 @@ class CreateAccountScreenState extends State<CreateAccountScreen> {
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
 
-  var mockDb = MockDatabase();
-
   @override
   void dispose() {
     firstNameController.dispose();
@@ -76,6 +70,14 @@ class CreateAccountScreenState extends State<CreateAccountScreen> {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<IAuth>().clearError();
+    });
   }
 
   @override
@@ -103,6 +105,8 @@ class CreateAccountScreenState extends State<CreateAccountScreen> {
 
               buildPasswordField(),
               const SizedBox(height: 16),
+
+              buildErrorMessage(),
 
               buildTermsAndConditions(),
               const SizedBox(height: 8),
@@ -168,9 +172,30 @@ class CreateAccountScreenState extends State<CreateAccountScreen> {
     validator: Validators.validatePassword,
   );
 
+  Widget buildErrorMessage() {
+    return Consumer<IAuth>(
+      builder: (ctx, auth, _) {
+        if (auth.error == null) return const SizedBox.shrink();
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Text(auth.error!, style: const TextStyle(color: Colors.red)),
+        );
+      },
+    );
+  }
+
   Widget buildTermsAndConditions()   => TermsAndConditionsCheckbox(onChanged: onAgreeChanged);
 
-  Widget buildRegisterButton() => ServicesButton(onPressed: onRegister,label: 'Register');
+  Widget buildRegisterButton() {
+    return Consumer<IAuth>(
+      builder: (context, auth, _) {
+        return ServicesButton(
+          label: auth.status == AuthStatus.loading ? 'Registering…' : 'Register',
+          onPressed: auth.status == AuthStatus.loading ? null : onRegister,
+        );
+      },
+    );
+  }
 
   Widget buildOrDivider() => const OrDivider(label: 'OR');
 

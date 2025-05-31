@@ -13,7 +13,7 @@ dependencies: # Runtime packages/library bundled into app for user
     sdk: flutter    # Core Flutter framework
 
   english_words: ^4.0.0    # Demo helper: generates random word pairs
-  provider: ^6.1.2    # Simple state-management solution
+  provider: ^6.1.5    # Simple state-management solution
 
   font_awesome_flutter: ^10.1.0  # Access Font Awesome icons in Flutter
   url_launcher: ^6.2.4    # Open URLs in browser/external apps

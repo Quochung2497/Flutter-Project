@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class ServicesButton extends StatelessWidget {
 
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final String label;
 
   const ServicesButton({
     Key? key,
-    required this.onPressed,
+    this.onPressed,
     required this.label,
   }) : super(key: key);
 

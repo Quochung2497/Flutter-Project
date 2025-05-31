@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:example_app/widgets/widgets.dart';
-import 'package:example_app/services/services.dart';
 import 'package:example_app/utils/utils.dart';
 import 'package:example_app/constants/constants.dart';
+import 'package:provider/provider.dart';
+import '../provider/IAuth.dart';
+import '../provider/auth_model.dart';
 
 
 class LoginScreen extends StatefulWidget{
@@ -27,29 +29,26 @@ class LoginScreenState extends State<LoginScreen>{
     final email = emailController.text.trim();
     final password = passwordController.text;
 
-    final user = await MockDatabase().login(email, password);
-    if (user != null) {
+    context.read<IAuth>().clearError();
+    final auth = context.read<IAuth>();
+    final success = await auth.login(email, password);
+    if (success) {
       showDialog(
         context: context,
-        builder: (_) => AlertDialog(
+        builder: (_) =>
+        AlertDialog(
           title: const Text('Login'),
           content: const Text('Login successful!'),
           actions: [
             TextButton(
               onPressed: () async {
-                // 1) clear the mock database
-                await MockDatabase().clear();
-                // 2) close the dialog
+                await auth.clear();
                 Navigator.of(context).pop();
               },
               child: const Text('Oke'),
             ),
           ],
         ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Invalid email or password.')),
       );
     }
   }
@@ -59,6 +58,14 @@ class LoginScreenState extends State<LoginScreen>{
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<IAuth>().clearError();
+    });
   }
 
   @override
@@ -77,6 +84,8 @@ class LoginScreenState extends State<LoginScreen>{
                 buildEmail(),
                 const SizedBox(height:12),
                 buildPassword(),
+
+                buildErrorMessage(),
 
                 const SizedBox(height: 40),
                 buildSigninButton(),
@@ -124,7 +133,26 @@ class LoginScreenState extends State<LoginScreen>{
     },
   );
 
-  Widget buildSigninButton() => ServicesButton(onPressed: onSignin,label: 'Sign in');
+  Widget buildErrorMessage() {
+    return Consumer<IAuth>(
+      builder: (_, auth, __) {
+        if (auth.error == null) return const SizedBox.shrink();
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Text(auth.error!, style: const TextStyle(color: Colors.red)),
+        );
+      },
+    );
+  }
+
+  Widget buildSigninButton() {
+    return Consumer<IAuth>(
+      builder: (_, auth, __) => ServicesButton(
+        label: auth.status == AuthStatus.loading ? 'Signing in…' : 'Sign in',
+        onPressed: auth.status == AuthStatus.loading ? null : onSignin,
+      ),
+    );
+  }
 
   Widget buildOrDivider() => const OrDivider(label: 'OR',);
 

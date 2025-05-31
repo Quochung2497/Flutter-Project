@@ -1,10 +1,18 @@
+import 'package:provider/provider.dart';
+import 'features/account/provider/IAuth.dart';
+import 'features/account/provider/auth_model.dart';
 import 'package:flutter/material.dart';
 import 'features/account/view/create_account_screen.dart';
 import 'features/account/view/login_screen.dart';
 import '../../../constants/routes.dart';
 
 void main() {
-  runApp(const App());
+  runApp(
+    ChangeNotifierProvider<IAuth>(
+      create: (_) => AuthModel(),
+      child: const App(),
+    ),
+  );
 }
 
 class App extends StatelessWidget {
@@ -23,15 +31,12 @@ class App extends StatelessWidget {
       initialRoute: AppRoutes.login,
 
       onGenerateRoute: (settings) {
-        Widget page;
-
-        switch(settings.name){
+        late final Widget page;
+        switch (settings.name) {
           case AppRoutes.register:
             page = const CreateAccountScreen();
             break;
           case AppRoutes.login:
-            page = const LoginScreen();
-            break;
           default:
             page = const LoginScreen();
         }
