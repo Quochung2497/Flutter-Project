@@ -12,8 +12,14 @@ dependencies: # Runtime packages/library bundled into app for user
   flutter:
     sdk: flutter    # Core Flutter framework
 
+  # state-management & DI
+  provider: ^6.1.5  # Simple state-management solution
+  get_it: ^7.6.1
+  bloc: ^8.1.0
+  flutter_bloc: ^8.1.2
+  rxdart: ^0.27.6
+
   english_words: ^4.0.0    # Demo helper: generates random word pairs
-  provider: ^6.1.5    # Simple state-management solution
 
   font_awesome_flutter: ^10.1.0  # Access Font Awesome icons in Flutter
   url_launcher: ^6.2.4    # Open URLs in browser/external apps

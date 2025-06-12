@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../widgets/logo_widget.dart';
-import '../../../widgets/title_widget.dart';
+import 'logo_widget.dart';
+import 'title_widget.dart';
 
 class AuthHeader extends StatelessWidget {
   final String title;

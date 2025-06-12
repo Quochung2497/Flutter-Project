@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../features/account/model/user.dart';
 import 'package:collection/collection.dart';
+import '../features/auth/model/model.dart';
 
 class MockDatabase {
   static const _key = 'mock_users';
